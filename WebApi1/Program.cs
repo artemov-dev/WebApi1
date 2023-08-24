@@ -4,14 +4,6 @@ using System.Runtime.InteropServices;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-   .AddNegotiate();
-
-builder.Services.AddAuthorization(options =>
-{
-    options.FallbackPolicy = options.DefaultPolicy;
-});
-
-builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
     .AddNegotiate(options =>
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -19,6 +11,13 @@ builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
             options.EnableLdap("contoso.com");
         }
     });
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = options.DefaultPolicy;
+});
+
 
 // Add services to the container.
 
