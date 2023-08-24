@@ -1,16 +1,35 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Runtime.InteropServices;
+using WebApi1;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
     .AddNegotiate(options =>
     {
+        
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
- //           options.EnableLdap("contoso.com");
+            options.EnableLdap(settings =>
+            {
+                settings.Domain = "contoso.com";
+                settings.MachineAccountName = "machineName";
+                settings.MachineAccountPassword =
+                                  builder.Configuration["Password"];
+                
+            });
         }
     });
+
+// replace the handler
+var serviceDescriptor = new ServiceDescriptor(typeof(NegotiateHandler),
+                                              typeof(NtlmNegotiateHandler),
+                                              ServiceLifetime.Transient);
+
+builder.Services.Replace(serviceDescriptor);
 
 
 builder.Services.AddAuthorization(options =>
