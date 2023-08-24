@@ -16,20 +16,13 @@ builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
             options.EnableLdap(settings =>
             {
                 settings.Domain = "contoso.com";
-                settings.MachineAccountName = "machineName";
+                settings.MachineAccountName = "debian";
                 settings.MachineAccountPassword =
-                                  builder.Configuration["Password"];
+                                  builder.Configuration["123qweAa"];
                 
             });
         }
     });
-
-// replace the handler
-var serviceDescriptor = new ServiceDescriptor(typeof(NegotiateHandler),
-                                              typeof(NtlmNegotiateHandler),
-                                              ServiceLifetime.Transient);
-
-builder.Services.Replace(serviceDescriptor);
 
 
 builder.Services.AddAuthorization(options =>
