@@ -13,14 +13,7 @@ builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
         
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            options.EnableLdap(settings =>
-            {
-                settings.Domain = "contoso.com";
-                settings.MachineAccountName = "debian";
-                settings.MachineAccountPassword =
-                                  builder.Configuration["123qweAa"];
-                
-            });
+            options.EnableLdap("contoso.com");
         }
     });
 
