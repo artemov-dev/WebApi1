@@ -1,4 +1,3 @@
-using Aspose.Slides;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.DirectoryServices.Protocols;
@@ -8,11 +7,6 @@ using WebApi1;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var di = new LdapDirectoryIdentifier(server: "dc.contoso.com", 389);
-var connection = new LdapConnection(di, new NetworkCredential("administrator", "123qweAa", "contoso.com"), AuthType.Ntlm);
-connection.SessionOptions.ProtocolVersion = 3;
-connection.Bind();
-Console.WriteLine("Hello, World!");
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
     .AddNegotiate(options =>
@@ -20,7 +14,15 @@ builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
         
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            options.EnableLdap("contoso.com");
+            options.EnableLdap(settings =>
+            {
+                settings.Domain = "contoso.com";
+                var ldapConnection = new LdapConnection(
+                    new LdapDirectoryIdentifier("dc.contoso.com"),
+                    new NetworkCredential("user", "123qweAa"), AuthType.Basic);
+                ldapConnection.SessionOptions.ReferralChasing = ReferralChasingOptions.None;
+                settings.LdapConnection = ldapConnection;
+            });
         }
     });
 
