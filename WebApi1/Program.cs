@@ -1,3 +1,4 @@
+using Aspose.Slides;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Runtime.InteropServices;
@@ -5,6 +6,16 @@ using WebApi1;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpClient<IConnector, Connector>().ConfigurePrimaryHttpMessageHandler(
+   serviceProvider =>
+   {
+       var httpClientHandler = new HttpClientHandler
+       {
+           UseProxy = false,
+           UseDefaultCredentials = true
+       };
+       return httpClientHandler;
+   });
 
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
