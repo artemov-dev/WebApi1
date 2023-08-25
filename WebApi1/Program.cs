@@ -9,7 +9,8 @@ using WebApi1;
 var builder = WebApplication.CreateBuilder(args);
 
 var di = new LdapDirectoryIdentifier(server: "dc.contoso.com", 389);
-var connection = new LdapConnection(di, new NetworkCredential("administrator", "123qweAa", "contoso.com"), AuthType.Kerberos);
+var connection = new LdapConnection(di, new NetworkCredential("administrator", "123qweAa", "contoso.com"), AuthType.Ntlm);
+connection.SessionOptions.ProtocolVersion = 3;
 connection.Bind();
 Console.WriteLine("Hello, World!");
 
