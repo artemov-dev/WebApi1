@@ -1,22 +1,17 @@
 using Aspose.Slides;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.DirectoryServices.Protocols;
+using System.Net;
 using System.Runtime.InteropServices;
 using WebApi1;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpClient<IConnector, Connector>().ConfigurePrimaryHttpMessageHandler(
-   serviceProvider =>
-   {
-       var httpClientHandler = new HttpClientHandler
-       {
-           UseProxy = false,
-           UseDefaultCredentials = true
-       };
-       return httpClientHandler;
-   });
-
+var di = new LdapDirectoryIdentifier(server: "dc.contoso.com", 389);
+var connection = new LdapConnection(di, new NetworkCredential("administrator", "123qweAa", "contoso.com"), AuthType.Kerberos);
+connection.Bind();
+Console.WriteLine("Hello, World!");
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
     .AddNegotiate(options =>
