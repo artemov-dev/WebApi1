@@ -19,7 +19,7 @@ builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
                 settings.Domain = "contoso.com";
                 var ldapConnection = new LdapConnection(
                     new LdapDirectoryIdentifier("dc.contoso.com"),
-                    new NetworkCredential("user", "123qweAa"), AuthType.Basic);
+                    new NetworkCredential("user@CONTOSO.COM", "123qweAa"), AuthType.Basic);
                 ldapConnection.SessionOptions.ReferralChasing = ReferralChasingOptions.None;
                 settings.LdapConnection = ldapConnection;
             });
