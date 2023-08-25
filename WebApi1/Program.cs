@@ -26,6 +26,9 @@ builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
         }
     });
 
+builder.WebHost.UseKestrel().UseIISIntegration();
+
+
 
 builder.Services.AddAuthorization(options =>
 {
