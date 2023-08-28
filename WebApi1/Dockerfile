@@ -21,7 +21,10 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libldap-2.4-2 \
     && rm -rf /var/lib/apt/lists/*
-RUN apt-get install realmd krb5-user software-properties-common python3-software-properties packagekit
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        krb5-user software-properties-common python3-software-properties packagekit \
+    && rm -rf /var/lib/apt/lists/*
 RUN realm join contoso.com -v --no-password
 WORKDIR /app
 COPY --from=publish /app/publish .
