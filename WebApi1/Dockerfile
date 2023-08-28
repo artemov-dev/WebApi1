@@ -19,4 +19,5 @@ RUN dotnet publish "WebApi1.csproj" -c Release -o /app/publish /p:UseAppHost=fal
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN apt-get install libldap2-dev -y
 ENTRYPOINT ["dotnet", "WebApi1.dll"]
