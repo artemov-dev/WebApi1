@@ -17,7 +17,10 @@ FROM build AS publish
 RUN dotnet publish "WebApi1.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libldap-2.4-2 \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN apt-get install libldap2-dev -y
 ENTRYPOINT ["dotnet", "WebApi1.dll"]
